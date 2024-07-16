@@ -2,7 +2,7 @@
 
 namespace Kata;
 
-class Order
+final readonly class Order
 {
     public Drink $drink;
 

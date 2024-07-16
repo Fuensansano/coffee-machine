@@ -4,7 +4,7 @@ namespace Kata;
 
 use Kata\vendor\DrinkMaker;
 
-class CoffeeMachine
+final class CoffeeMachine
 {
     private DrinkMaker $drinkMaker;
 
@@ -15,6 +15,10 @@ class CoffeeMachine
 
     public function prepare(Order $order): void
     {
+        if (($order->drink === Drink::Coffee)) {
+            $this->drinkMaker->prepare("C::");
+            return;
+        }
         $this->drinkMaker->prepare("H::");
     }
 }
