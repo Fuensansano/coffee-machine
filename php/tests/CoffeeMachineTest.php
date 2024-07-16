@@ -2,16 +2,29 @@
 
 namespace KataTests;
 
+use Generator;
 use Kata\CoffeeMachine;
 use Kata\Drink;
 use Kata\Order;
 use Kata\vendor\DrinkMaker;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class CoffeeMachineTest extends TestCase
 {
     private DrinkMaker $drinkMaker;
     private CoffeeMachine $coffeeMachine;
+
+    /**
+     * @dataProvider orderProvider
+     */
+    public static function orderProvider(): Generator
+    {
+        yield "chocolate" => [Drink::Chocolate,"H::"];
+        yield "coffee" => [Drink::Coffee,"C::"];
+        yield "tea" => [Drink::Tea,"T::"];
+    }
 
     protected function setUp(): void
     {
@@ -20,35 +33,14 @@ class CoffeeMachineTest extends TestCase
         $this->coffeeMachine = new CoffeeMachine($this->drinkMaker);
     }
 
-    /** @test */
-    public function given_a_chocolate_order_then_the_machine_prepare_the_order(): void
+    #[Test]
+    #[DataProvider('orderProvider')]
+    public function given_a_drink_order_then_the_machine_prepare_the_order(Drink $drink, string $expected): void
     {
+        $order = new Order($drink);
 
-        $order = new Order(Drink::Chocolate);
+        $this->drinkMaker->expects(self::once())->method('prepare')->with($expected);
 
-        $this->drinkMaker->expects(self::once())->method('prepare')->with("H::");
-
-        $this->coffeeMachine->prepare($order);
-    }
-
-    /** @test */
-    public function given_a_coffee_order_then_the_machine_prepare_the_order(): void
-    {
-        $order = new Order(Drink::Coffee);
-
-
-        $this->drinkMaker->expects(self::once())->method('prepare')->with("C::");
-
-        $this->coffeeMachine->prepare($order);
-    }
-
-    /** @test */
-    public function given_a_tea_order_then_the_machine_prepare_the_order(): void
-    {
-        $order = new Order(Drink::Tea);
-
-
-        $this->drinkMaker->expects(self::once())->method('prepare')->with("T::");
         $this->coffeeMachine->prepare($order);
     }
 }
