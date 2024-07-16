@@ -6,4 +6,5 @@ enum Drink
 {
     case Chocolate;
     case Coffee;
+    case Tea;
 }

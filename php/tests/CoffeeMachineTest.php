@@ -33,4 +33,16 @@ class CoffeeMachineTest extends TestCase
         $drinkMaker->expects(self::once())->method('prepare')->with("C::");
         $coffeeMachine->prepare($order);
     }
+
+    /** @test */
+    public function given_a_tea_order_then_the_machine_prepare_the_order(): void
+    {
+        $drinkMaker = self::createMock(DrinkMaker::class);
+        $order = new Order(Drink::Tea);
+
+        $coffeeMachine = new CoffeeMachine($drinkMaker);
+
+        $drinkMaker->expects(self::once())->method('prepare')->with("T::");
+        $coffeeMachine->prepare($order);
+    }
 }
